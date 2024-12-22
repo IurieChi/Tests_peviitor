@@ -18,11 +18,17 @@ class GetToken:
         
     
     def get_token(self):
-        
         url = f"{self.DOMAIN}{self.TOKEN_ROUTE}"
-
-        response = requests.post(url, json={"email": self.EMAIL}, headers=self.header)
-        if response.status_code != 200:
-            raise Exception("Get token conection code", response.status_code)
-        else:
+        
+        try:
+            response = requests.post(url, json={"email": self.EMAIL}, headers=self.header)
+            response.raise_for_status()  # Raise HTTPError for bad responses (4xx and 5xx)
+        except requests.exceptions.RequestException as e:
+            # Catch any requests-related exceptions and raise a new exception with details
+            raise Exception(f"Error while attempting to get token: {e}")
+        
+        try:
             return response.json()["access"]
+        except KeyError:
+            # Handle case where "access" key is not in the response
+            raise Exception("Token not found in the response")
