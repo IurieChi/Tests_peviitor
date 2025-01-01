@@ -15,6 +15,18 @@ class GetJobs:
         }
 
     def get_jobs(self, company: str):
+        """_summary_
+
+        Args:
+            company (str): _description_
+
+        Raises:
+            Exception: _description_
+            Exception: _description_
+
+        Returns:
+            Json: Data with jobs
+        """
         url = f"{self.base_url}{self.route}?company={company}"
 
         try:
