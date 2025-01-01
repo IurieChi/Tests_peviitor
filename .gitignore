@@ -1,1 +1,4 @@
 .DS_Store
+*.dotx
+__pycache__
+tests
