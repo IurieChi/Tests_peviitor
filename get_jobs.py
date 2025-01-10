@@ -20,11 +20,11 @@ class GetJobs:
         """_summary_
 
         Args:
-            company (str): _description_
+            company (str): company name that are present on API to extract jobs
 
         Raises:
-            Exception: _description_
-            Exception: _description_
+            Exception RequestException: Raise an HTTPError for bad responses
+            Exception ValueError:  if response is not valid JSON
 
         Returns:
             Json: Data with jobs
@@ -35,7 +35,8 @@ class GetJobs:
 
         while True:
             try:
-                response = requests.request("GET", url=f"{self.base_url}{self.route}?company={company}&page={page}", headers=self.headers)
+                response = requests.request("GET", url=f"{self.base_url}{self.route}?company={
+                                            company}&page={page}", headers=self.headers)
 
                 # Raise an HTTPError for bad responses (4xx and 5xx)
                 response.raise_for_status()
