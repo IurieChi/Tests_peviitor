@@ -1,15 +1,12 @@
 import requests
-from api_get_token import GetToken
 
 
 class GetJobs:
 
-    def __init__(self):
-        self.token = GetToken().get_token()
+    def __init__(self, TOKEN):
+        self.token = TOKEN
         self.base_url = "https://api.laurentiumarian.ro/"
         self.route = "jobs/get/"
-
-        # payload = {"company": f"{company}"}
 
         self.headers = {
             "Content-Type": "application/json",
@@ -35,8 +32,8 @@ class GetJobs:
 
         while True:
             try:
-                response = requests.request("GET", url=f"{self.base_url}{self.route}?company={
-                                            company}&page={page}", headers=self.headers)
+                response = requests.get(url=f"{self.base_url}{self.route}?company={
+                    company}&page={page}", headers=self.headers)
 
                 # Raise an HTTPError for bad responses (4xx and 5xx)
                 response.raise_for_status()
