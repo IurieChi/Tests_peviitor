@@ -14,7 +14,8 @@ class GetJobs:
         }
 
     def get_jobs(self, company: str):
-        """_summary_
+        """
+        Fetch jobs for a specific company from the API.
 
         Args:
             company (str): company name that are present on API to extract jobs
@@ -24,7 +25,7 @@ class GetJobs:
             Exception ValueError:  if response is not valid JSON
 
         Returns:
-            Json: Data with jobs
+            list: A list of all job entries for the given company.
         """
 
         page = 1
@@ -53,8 +54,9 @@ class GetJobs:
 
             except requests.exceptions.RequestException as e:
                 # Catch any exceptions raised by the `requests` library
-                raise Exception(
-                    f"Error while fetching jobs for company {company}: {e}")
+                print(f"Error while fetching jobs for company '{
+                      company.upper()}': {e}")
+                break  # Exit the loop and move to the next company
 
         try:
             return all_jobs
