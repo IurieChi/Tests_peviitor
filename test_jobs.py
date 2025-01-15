@@ -10,6 +10,7 @@ class ValidateJob():
     def get_content(self):
         """
         Extract job content fetched from the  job URL.
+
         """
         # content = requests.get(self.job["job_link"], timeout=10)
         # return content
@@ -36,25 +37,73 @@ class ValidateJob():
             return None
 
     def validate_job_link(self):
-        """Check if the link is accessible."""
+        """Check if the link is accessible.
+        Raises:
+            AssertionError: If 'link' is not accesible.
 
-        response = requests.head(self.job["job_link"], timeout=10)
-        try:
-            assert response.status_code == 200
-            # print(f"{self.job["job_link"]} OK")
-            return self.job
-        except:
-            print(f"Company {self.job["company_name"]}: {self.job["job_link"]} Link is not accessible")
-            return False
+        """
 
-    def validate_job_title(self, content):
-        """Check if the job title is present in the content"""
+        response = requests.get(self.job["job_link"], timeout=10)
         try:
-            assert self.job["job_title"] in content, f"Job title not found in the Page {self.job["job_link"]}"
+            assert response.status_code == 200, f"Company: {self.job["company_name"]}: {
+                self.job["job_link"]} Link is not accessible"
+
             return self.job
 
         except AssertionError as e:
             print(f"AssertionError: {e}")
-            return False
+            self.job["job_link"] = False
 
-    
+            return self.job
+
+    def validate_job_title(self, content):
+        """
+        Check if the job title is present in the content
+
+        Raises:
+            AssertionError: If 'tittle' is not present on the page.
+
+        """
+        try:
+            assert self.job["job_title"] in content, f"Job title not found in the Page {
+                self.job["job_link"]}"
+            return self.job
+
+        except AssertionError as e:
+            print(f"AssertionError: {e}")
+            self.job["job_title"] = False
+            return self.job
+
+    def validate_job_location(self):
+        """
+        Validate that the 'city' field is not an empty string or an empty list.
+
+        Raises:
+            AssertionError: If 'city' is an empty string or an empty list.
+        """
+        try:
+            assert self.job["city"] not in ("", []), f"City fild is empty for Company: {
+                self.job["company_name"]} and job title: {self.job["job_title"]}"
+
+        except AssertionError as e:
+
+            print(f"AssertionError: {e}")
+            self.job["city"] = False
+            return self.job
+
+    def validate_job_type(self):
+        """
+        Validate that the 'remote' field is not an empty string or an empty list.
+
+        Raises:
+            AssertionError: If 'remote' is an empty string or an empty list.
+        """
+        try:
+            assert self.job["remote"] not in ("", []), f"Job type fild is empty for Company: {
+                self.job["company_name"]} and job title: {self.job["job_title"]}"
+
+        except AssertionError as e:
+
+            print(f"AssertionError: {e}")
+            self.job["remote"] = False
+            return self.job
