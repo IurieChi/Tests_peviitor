@@ -2,6 +2,8 @@ import requests
 
 
 class GetJobs:
+    """_summary_
+    """
 
     def __init__(self, TOKEN):
         self.token = TOKEN
@@ -28,13 +30,13 @@ class GetJobs:
             list: A list of all job entries for the given company.
         """
 
-        page = 1
+        pages = 1
         all_jobs = []
+        url = f"{self.base_url}{self.route}?company={company}&page={pages}"
 
         while True:
             try:
-                response = requests.get(url=f"{self.base_url}{self.route}?company={
-                    company}&page={page}", headers=self.headers)
+                response = requests.get(url=url, headers=self.headers, timeout=10)
 
                 # Raise an HTTPError for bad responses (4xx and 5xx)
                 response.raise_for_status()
@@ -50,7 +52,7 @@ class GetJobs:
                 if next_page is None:
                     break
                 # Incriment page and continue to extract all jobs from API
-                page += 1
+                pages += 1
 
             except requests.exceptions.RequestException as e:
                 # Catch any exceptions raised by the `requests` library
@@ -60,7 +62,6 @@ class GetJobs:
 
         try:
             return all_jobs
-        except ValueError:
+        except ValueError  as exc:
             # Handle cases where the response is not valid JSON
-            raise Exception(
-                f"Failed to parse JSON response for company {company}")
+            raise ValueError( f"Failed to parse JSON response for company {company}") from exc
