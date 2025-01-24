@@ -36,7 +36,7 @@ class GetJobs:
 
         while True:
             try:
-                response = requests.get(url=url, headers=self.headers, timeout=10)
+                response = requests.get(url=url, headers=self.headers, timeout=50)
 
                 # Raise an HTTPError for bad responses (4xx and 5xx)
                 response.raise_for_status()
@@ -53,6 +53,8 @@ class GetJobs:
                     break
                 # Incriment page and continue to extract all jobs from API
                 pages += 1
+
+                url = f"{self.base_url}{self.route}?company={company}&page={pages}"
 
             except requests.exceptions.RequestException as e:
                 # Catch any exceptions raised by the `requests` library
