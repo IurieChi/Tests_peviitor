@@ -1,7 +1,8 @@
 .DS_Store
 *.dotx
 __pycache__
-tests
+tests/
+test.py
 
 # Environments
 # .env
