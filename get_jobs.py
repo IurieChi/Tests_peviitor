@@ -1,8 +1,17 @@
+"""Conect to  Validator DB and extract company  jobs
+
+
+Raises:
+    RequestException: Raise an HTTPError for bad responses
+    ValueError: Failed to parse JSON response
+Returns:
+    list of object: jobs 
+"""
 import requests
 
 
 class GetJobs:
-    """_summary_
+    """Get Jobs from validator DB
     """
 
     def __init__(self, TOKEN):
@@ -61,6 +70,7 @@ class GetJobs:
                 print(f"Error while fetching jobs for company '{
                       company.upper()}': {e}")
                 break  # Exit the loop and move to the next company
+
 
         try:
             return all_jobs
