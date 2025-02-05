@@ -31,13 +31,13 @@ def validate_city_str(city):
                 if city == "all":
                     return "all"
 
-                if location.get("county").lower() == city:
-                    return f"all {city}"
-
                 if location.get("name").lower() == city:
                     return city
 
-                return False
+                if location.get("county").lower() == city:
+                    return f"all {city}"
+        else:
+            return False
 
         print(f"{city.upper()}: is not a valid City in Romania")
         return False
@@ -48,15 +48,21 @@ def validate_city_str(city):
         return False  # Ensure the function always returns a boolean value
 
 
-def validate_city(city):
+def validate_city(cities):
+    """code to check if cities is list or string then use apropriete
+    call to validate list  of strings  or  just one string"""
     results = []
-    if isinstance(city, str):
-        return validate_city_str(city)
-    elif isinstance(city, list):
-        for location in city:
-            is_valid = validate_city_str(location)
+    if isinstance(cities, str):
+        if " " in cities:
+            city = cities.replace(" ", "-")
+            return validate_city_str(city)
+        return validate_city_str(cities)
+    elif isinstance(cities, list):
+        for city in cities:
+            if " " in  city:
+                city = city.replace(" ", "-")
+            is_valid = validate_city_str(city)
             results.append(is_valid)
-            # print(results)
         return results
 
 
@@ -90,8 +96,8 @@ def update_location_if_is_county(counties, locations):
 
 
 count = get_county_json("Prahova")
-loca = ["Iasi", "Bucuresti", "all", "muceggai"]
-lo = 'Bucuresti'
+loca = ["Iasi", "Bucuresti", "cluj", 'targu mures']
+lo = 'dej'
 # print(count)
 # print(update_location_if_is_county(count, loca))
 # print(validate_city(loca))
