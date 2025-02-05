@@ -1,19 +1,10 @@
 """publish jobs to production"""
 
 import requests
-from api_get_token import GetToken
-from get_jobs import GetJobs
 from job_failed import Item
 
-TOKEN = GetToken().get_token()
-job = GetJobs(TOKEN)
 
-headers = {
-    "Content-Type": "application/json",
-    "Authorization": f"Bearer {TOKEN}"
-}
-
-def job_publish_to_prod(jobs_to_publish, filtered_jobs ,fail_to_publish_validator):
+def job_publish_to_prod(jobs_to_publish, filtered_jobs ,fail_to_publish_validator, headers):
     """
     Function to publish jobs in ptoduction
     """
