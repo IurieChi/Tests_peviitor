@@ -6,16 +6,26 @@ import requests
 
 
 def has_diacritics(char):
+    """replace char in string with unicode"""
     return any(unicodedata.combining(c) for c in char)
 
 
 def remove_diacritics(input_string):
+    """check if string has diacritics 
+    if True then call has_diacritics(char) to replase it"""
     normalized_string = unicodedata.normalize("NFD", input_string)
     return "".join(char for char in normalized_string if not has_diacritics(char))
 
 
 def validate_city_str(city):
+    """Check  if city  is a valid city in Romania
 
+    Args:
+        city (str): name of the city 
+
+    Returns:
+        False or city: return false or city string for further data validation
+    """
     loc = city.lower()
     city = remove_diacritics(loc)
     url = f"https://api.laurentiumarian.ro/orase/?search={city}"
@@ -37,10 +47,8 @@ def validate_city_str(city):
                 if location.get("county").lower() == city:
                     return f"all {city}"
         else:
+            print(f"{city.upper()}: is not a valid City in Romania")
             return False
-
-        print(f"{city.upper()}: is not a valid City in Romania")
-        return False
 
     except requests.RequestException as e:
         # Handle exceptions (e.g., network errors, invalid responses)
@@ -101,3 +109,4 @@ lo = 'dej'
 # print(count)
 # print(update_location_if_is_county(count, loca))
 # print(validate_city(loca))
+
