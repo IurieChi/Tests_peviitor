@@ -20,7 +20,7 @@ def job_publish_to_prod(jobs_to_publish, filtered_jobs ,fail_to_publish_validato
     url = "https://api.laurentiumarian.ro/jobs/publish/"
     try:
 
-        responce = requests.post(url=url, headers=headers, json=jobs_to_publish, timeout=50)
+        responce = requests.post(url=url, headers=headers, json=jobs_to_publish, timeout=100)
 
         if responce.status_code == 200:
             print(f"For {jobs_to_publish[0]["company"].upper()} has been published: {
