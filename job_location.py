@@ -115,6 +115,3 @@ def update_location_if_is_county(counties, locations):
     else:
         locations = "all"
     return locations
-
-
-print(validate_city("IASI"))
