@@ -41,19 +41,21 @@ def validate_city_str(city):
         cities = responce.get("results")
 
         if not cities:
+            # Try replacing spaces with dashes and check again
             if  " " in city:
                 city = city.replace(" ", "-")
                 url = f"https://api.laurentiumarian.ro/orase/?search={city}"
                 responce = requests.get(url=url, timeout=10).json()
                 cities = responce.get("results")
 
+            # Try replacing dashes with spaces and check again
             elif  "-" in city:
                 city = city.replace("-"," ")
                 url = f"https://api.laurentiumarian.ro/orase/?search={city}"
                 responce = requests.get(url=url, timeout=10).json()
                 cities = responce.get("results")
-
-        if cities:
+                
+        #if cities not empty iterate and validatte if city exist in the data
             for location in cities:
 
                 if location.get("name").lower() == city:
