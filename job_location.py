@@ -26,26 +26,42 @@ def validate_city_str(city):
     Returns:
         False or city: return false or city string for further data validation
     """
-    loc = city.lower()
-    city = remove_diacritics(loc)
-    url = f"https://api.laurentiumarian.ro/orase/?search={city}"
+    # Remove diacritics and Convert to lowercase for comparison
+    city = remove_diacritics(city.lower())
+
     try:
+        if city == "bucuresti":
+            return "Bucuresti"
+
+        if city == "all":
+            return "all"
+
+        url = f"https://api.laurentiumarian.ro/orase/?search={city}"
         responce = requests.get(url=url, timeout=10).json()
         cities = responce.get("results")
+
+        if not cities:
+            if  " " in city:
+                city = city.replace(" ", "-")
+                url = f"https://api.laurentiumarian.ro/orase/?search={city}"
+                responce = requests.get(url=url, timeout=10).json()
+                cities = responce.get("results")
+
+            elif  "-" in city:
+                city = city.replace("-"," ")
+                url = f"https://api.laurentiumarian.ro/orase/?search={city}"
+                responce = requests.get(url=url, timeout=10).json()
+                cities = responce.get("results")
+
         if cities:
             for location in cities:
-
-                if city == "bucuresti":
-                    return "Bucuresti"
-
-                if city == "all":
-                    return "all"
 
                 if location.get("name").lower() == city:
                     return city
 
-                if location.get("county").lower() == city:
+                elif location.get("county").lower() == city:
                     return f"all {city}"
+
         else:
             print(f"{city.upper()}: is not a valid City in Romania")
             return False
@@ -61,14 +77,9 @@ def validate_city(cities):
     call to validate list  of strings  or  just one string"""
     results = []
     if isinstance(cities, str):
-        if " " in cities:
-            city = cities.replace(" ", "-")
-            return validate_city_str(city)
         return validate_city_str(cities)
     elif isinstance(cities, list):
         for city in cities:
-            if " " in  city:
-                city = city.replace(" ", "-")
             is_valid = validate_city_str(city)
             results.append(is_valid)
         return results
@@ -101,12 +112,3 @@ def update_location_if_is_county(counties, locations):
     else:
         locations = "all"
     return locations
-
-
-count = get_county_json("Prahova")
-loca = ["Iasi", "Bucuresti", "cluj", 'targu mures']
-lo = 'dej'
-# print(count)
-# print(update_location_if_is_county(count, loca))
-# print(validate_city(loca))
-
