@@ -54,7 +54,8 @@ def validate_city_str(city):
                 url = f"https://api.laurentiumarian.ro/orase/?search={city}"
                 responce = requests.get(url=url, timeout=10).json()
                 cities = responce.get("results")
-                
+
+        if cities:
         #if cities not empty iterate and validatte if city exist in the data
             for location in cities:
 
@@ -114,3 +115,6 @@ def update_location_if_is_county(counties, locations):
     else:
         locations = "all"
     return locations
+
+
+print(validate_city("IASI"))
