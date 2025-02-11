@@ -1,6 +1,7 @@
 """
 code to validate city and county for Romania
 """
+
 import unicodedata
 import requests
 
@@ -11,7 +12,7 @@ def has_diacritics(char):
 
 
 def remove_diacritics(input_string):
-    """check if string has diacritics 
+    """check if string has diacritics
     if True then call has_diacritics(char) to replase it"""
     normalized_string = unicodedata.normalize("NFD", input_string)
     return "".join(char for char in normalized_string if not has_diacritics(char))
@@ -21,7 +22,7 @@ def validate_city_str(city):
     """Check  if city  is a valid city in Romania
 
     Args:
-        city (str): name of the city 
+        city (str): name of the city
 
     Returns:
         False or city: return false or city string for further data validation
@@ -42,21 +43,21 @@ def validate_city_str(city):
 
         if not cities:
             # Try replacing spaces with dashes and check again
-            if  " " in city:
+            if " " in city:
                 city = city.replace(" ", "-")
                 url = f"https://api.laurentiumarian.ro/orase/?search={city}"
                 responce = requests.get(url=url, timeout=10).json()
                 cities = responce.get("results")
 
             # Try replacing dashes with spaces and check again
-            elif  "-" in city:
-                city = city.replace("-"," ")
+            elif "-" in city:
+                city = city.replace("-", " ")
                 url = f"https://api.laurentiumarian.ro/orase/?search={city}"
                 responce = requests.get(url=url, timeout=10).json()
                 cities = responce.get("results")
 
         if cities:
-        #if cities not empty iterate and validatte if city exist in the data
+            # if cities not empty iterate and validatte if city exist in the data
             for location in cities:
 
                 if location.get("name").lower() == city:
@@ -109,7 +110,7 @@ def update_location_if_is_county(counties, locations):
         for location in locations:
             for county in counties:
                 if county in remove_diacritics(location):
-                    locations[i] = (f"all {county}")
+                    locations[i] = f"all {county}"
             i += 1
         # return locations
     else:

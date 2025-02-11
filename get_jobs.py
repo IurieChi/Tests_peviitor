@@ -5,14 +5,14 @@ Raises:
     RequestException: Raise an HTTPError for bad responses
     ValueError: Failed to parse JSON response
 Returns:
-    list of object: jobs 
+    list of object: jobs
 """
+
 import requests
 
 
 class GetJobs:
-    """Get Jobs from validator DB
-    """
+    """Get Jobs from validator DB"""
 
     def __init__(self, TOKEN):
         self.token = TOKEN
@@ -21,7 +21,7 @@ class GetJobs:
 
         self.headers = {
             "Content-Type": "application/json",
-            "Authorization": f"Bearer {self.token}"
+            "Authorization": f"Bearer {self.token}",
         }
 
     def get_jobs(self, company: str):
@@ -53,10 +53,10 @@ class GetJobs:
                 response = response.json()
 
                 # Add jobs to the jobs
-                jobs = response['results']
+                jobs = response["results"]
                 all_jobs.extend(jobs)
 
-                next_page = response['next']
+                next_page = response["next"]
 
                 if next_page is None:
                     break
@@ -67,13 +67,16 @@ class GetJobs:
 
             except requests.exceptions.RequestException as e:
                 # Catch any exceptions raised by the `requests` library
-                print(f"Error while fetching jobs for company '{
-                      company.upper()}': {e}")
+                print(
+                    f"Error while fetching jobs for company '{
+                      company.upper()}': {e}"
+                )
                 break  # Exit the loop and move to the next company
-
 
         try:
             return all_jobs
-        except ValueError  as exc:
+        except ValueError as exc:
             # Handle cases where the response is not valid JSON
-            raise ValueError( f"Failed to parse JSON response for company {company}") from exc
+            raise ValueError(
+                f"Failed to parse JSON response for company {company}"
+            ) from exc
