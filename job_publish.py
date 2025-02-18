@@ -11,13 +11,16 @@ def job_publish_to_prod(
     Function to publish jobs in ptoduction
     """
     url = "https://api.laurentiumarian.ro/jobs/publish/"
+    time_out = 20
+
+    if len(jobs_to_publish) > 100:
+        time_out = 300
+
     try:
         # cerate session to handle big payloads
         session = requests.Session()
         # make post request
-        responce = session.post(
-            url=url, headers=headers, json=jobs_to_publish, timeout=50
-        )
+        responce = session.post(url=url, headers=headers, json=jobs_to_publish)
 
         if responce.status_code == 200:
             print(
