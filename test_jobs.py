@@ -40,7 +40,7 @@ class ValidateJob:
                 timeout=50,
             )
             if response.status_code == 200:
-                return response.text
+                return response.text.lower()
 
         except requests.RequestException as e:
             # Handle exceptions (e.g., network errors, invalid responses)
@@ -85,9 +85,10 @@ class ValidateJob:
             AssertionError: If 'tittle' is not present on the page.
 
         """
+        title = self.job["job_title"]
         try:
             assert (
-                self.job["job_title"] in content
+                title.lower() in content
             ), f"Job title:'{self.job["job_title"]}' NOT FOUND on the page:{
                 self.job["job_link"]}"
             return self.job
@@ -162,3 +163,15 @@ class ValidateJob:
             print(f"AssertionError: {e}")
             self.job["remote"] = False
             return self.job
+
+    def update_job_type_from_content(self, content):
+        """check expected job type on the job description page"""
+        expected_job_type_formats = ["hybrid", "remote", "on-site"]
+
+        content_job_type = []
+        for job_type in expected_job_type_formats:
+            if job_type in content:
+                content_job_type.append(job_type)
+
+        if len(content_job_type) > 1:
+            self.job["remote"] = content_job_type
