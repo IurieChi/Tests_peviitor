@@ -173,5 +173,6 @@ class ValidateJob:
             if job_type in content:
                 content_job_type.append(job_type)
 
-        if len(content_job_type) > 1 and self.job["remote"] != content_job_type:
+        if len(content_job_type) and self.job["remote"] != content_job_type:
             self.job["remote"] = content_job_type
+            return self.job["remote"]
