@@ -26,8 +26,7 @@ class GetToken:
         }
 
     def get_token(self):
-        """_summary_
-
+        """
         Raises:
             Exception: Raise HTTPError for bad responses (4xx and 5xx)
             Exception: Error while attempting to get token:
@@ -42,14 +41,18 @@ class GetToken:
                 url, json={"email": self.EMAIL}, headers=self.header, timeout=10
             )
             response.raise_for_status()  # Raise HTTPError for bad responses (4xx and 5xx)
+
+        except requests.exceptions.ReadTimeout as e:
+            print("Timed out: api is not reachable", e)
         except requests.exceptions.RequestException as e:
             # Catch any requests-related exceptions and raise a new exception with details
-            raise requests.exceptions.RequestException(
-                "Error while attempting to get token:"
-            ) from e
+            print(
+                "Something went wrong: get_token endpoint did not respond",
+                response.status_code,
+            )
 
         try:
             return response.json()["access"]
         except KeyError as e:
             # Handle case where "access" key is not in the response
-            raise KeyError("'access' not found in the response") from e
+            print("'access'key not found in the response", e)

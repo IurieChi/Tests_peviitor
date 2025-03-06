@@ -1,8 +1,8 @@
-name: Scheduled Python Script
+name: General point run Jobs validation
 
 on:
   schedule:
-    - cron: '14 15 * * *'
+    - cron:  '0 7 * * *'  # Runs daily at 8:00 AM CET / 9:00 AM CEST
   workflow_dispatch:  
 
 jobs:
