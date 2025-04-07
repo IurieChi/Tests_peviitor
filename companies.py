@@ -92,6 +92,7 @@ companies = [
     "Heimdal",
     "pluxee",
     "humancapital",
+    "suvoda",
 ]
 
 # companies = ["pluxee"]
