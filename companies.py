@@ -93,6 +93,7 @@ companies = [
     "pluxee",
     "humancapital",
     "suvoda",
+    "Exclusive Networks Romania",
 ]
 
 # companies = ["pluxee"]
