@@ -94,9 +94,10 @@ companies = [
     "humancapital",
     "suvoda",
     "Exclusive Networks Romania",
+    "expertware",
 ]
 
-# companies = ["pluxee"]
+# companies = ["expertware"]
 
 
 sorted_companies = sorted(companies, key=lambda x: x.lower())
